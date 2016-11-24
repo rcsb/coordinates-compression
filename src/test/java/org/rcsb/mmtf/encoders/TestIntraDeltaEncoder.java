@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.junit.Test;
 import org.rcsb.mmtf.intracoders.IntraDeltaEncoder;
-import org.rcsb.mmtf.utils.ArrayUtils;
 import org.rcsb.mmtf.utils.Convertors;
 
 /**
@@ -21,9 +20,7 @@ public class TestIntraDeltaEncoder {
 
 	@Test
 	public void TestEncodeIntraDelta() {
-		
-		ArrayUtils util = new ArrayUtils();
-		
+
 		// create arrays with values known to be correct
 		List<Integer> inArray = Arrays.asList(5,9,10,15,12,1);
 		int[] in = Convertors.listIntegerToPrimitives(inArray);

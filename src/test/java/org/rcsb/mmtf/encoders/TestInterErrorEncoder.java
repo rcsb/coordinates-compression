@@ -10,7 +10,6 @@ import java.util.List;
 
 import org.junit.Test;
 import org.rcsb.mmtf.intercoders.InterErrorEncoder;
-import org.rcsb.mmtf.utils.ArrayUtils;
 import org.rcsb.mmtf.utils.Convertors;
 
 /**
@@ -21,9 +20,7 @@ public class TestInterErrorEncoder {
 
 	@Test
 	public void TestEncodeInterErrors() {
-		
-		ArrayUtils util = new ArrayUtils();
-		
+
 		List<Integer> inArray1 = Arrays.asList(6,8,5,7,9,20);
 		int[] in1 = Convertors.listIntegerToPrimitives(inArray1);
 		
