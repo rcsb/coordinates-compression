@@ -25,7 +25,6 @@ import org.rcsb.mmtf.mappers.MapToByteArray;
 import org.rcsb.mmtf.methods.GetGzipSize;
 import org.rcsb.mmtf.packing.RecursiveIndexingPacking;
 import org.rcsb.mmtf.spark.data.MmtfStructureData;
-import org.rcsb.mmtf.statistics.CompressionStatistics;
 import org.rcsb.mmtf.utils.ArrayUtils;
 import org.rcsb.mmtf.utils.Convertors;
 import org.rcsb.mmtf.utils.Writer;
@@ -41,13 +40,12 @@ public class RunTotalAnalysis implements Serializable {
 
 	private static final long serialVersionUID = -6015826264355327041L;
 
-	private static String dataroot = "/pdb/";
-	private static String root = "/pdb/analysis_reports/";
-
-//	private static String dataroot = "/home/anthony/yana/";
-//	private static String root = "/home/anthony/yana/analysis_reports/";
-
 	public static void main(String[] args ) throws IOException {
+		
+		// path to a Hadoop sequence file with the PDB structures in MMTF format
+		String path = args[0];
+		// path to the folder with results
+		String root = args[1];
 		
 		String compression;
 		Writer w = new Writer();
@@ -70,9 +68,7 @@ public class RunTotalAnalysis implements Serializable {
 		// Different data sets
 		boolean[] caTraceFlags = {false, true};
 
-		String path = dataroot+"Total.hadoop.latest";
 		JavaPairRDD<String, MmtfStructure> mmtfEncoded = new MmtfStructureData(path).getJavaPairRdd()
-						.filter(t -> t._2.getStructureId().contains("1SR9"))
 						.cache();
 		
 		// == RUN ANALYSIS ==
@@ -89,13 +85,11 @@ public class RunTotalAnalysis implements Serializable {
 			
 			// original coordinates
 			
-			JavaPairRDD<String, float[]> original = coordinates
+			JavaPairRDD<String, byte[]> original = coordinates
 					.mapToPair(t -> new Tuple2<String, float[]>(t._1, Convertors.nestedArrayToFlat(t._2)))
-					.mapToPair(t -> new Tuple2<String, float[]>("floating point;"+t._1, t._2));
-			
-			JavaPairRDD<String, byte[]> originalBA = original
-					.mapToPair(t -> new Tuple2<String, byte[]>(t._1, Convertors.arrayToByteArray(t._2)));
-
+					.mapToPair(t -> new Tuple2<String, float[]>("floating point;"+t._1, t._2))
+					.mapToPair(t -> new Tuple2<String, byte[]>(t._1, Convertors.arrayToByteArray(t._2)))
+					.cache();
 			
 			// == for LOSSLESS and LOSSY integer encoding ==
 			for (float multiplier : multipliers) {
@@ -103,38 +97,19 @@ public class RunTotalAnalysis implements Serializable {
 				if (multiplier == 1000.0) {compression = "lossless";}
 				else {compression = "lossy";}
 								
-				JavaPairRDD<String, int[]> encoded = coordinates
+				JavaPairRDD<String, byte[]> encoded = coordinates
 						.mapToPair(t -> new Tuple2<String, float[]>(t._1, Convertors.nestedArrayToFlat(t._2)))
 						.mapToPair(t -> new Tuple2<String, int[]>(t._1, ArrayConverters.convertFloatsToInts(t._2, multiplier)))
 						.flatMapToPair(new FlatMapIntraEncodingMethods(methods))
-						.mapToPair(new RecursiveIndexingPacking());
+						.mapToPair(new RecursiveIndexingPacking())
+						.mapToPair(new MapToByteArray());
 				
-				// == CALCULATE STATISTICS ==
-				
-				// === entropy coordinates ===
-				
-				// original coordinates
-				JavaPairRDD<String, Double> originalEntropy = original
-				.mapToPair(t -> new Tuple2<String, Double>(t._1, CompressionStatistics.calculateEntropyOnFloats(t._2)));
+				// == size ==
 
-				// encoded coordinates
-				JavaPairRDD<String, Double> encodedEntropy = encoded
-				.mapToPair(t -> new Tuple2<String, Double>(t._1, CompressionStatistics.calculateEntropyOnIntegers(t._2)));
-				
-				List<Tuple2<String, Double>> entropyArr = originalEntropy.union(encodedEntropy).collect();
+				JavaPairRDD<String, byte[]> data = original.union(encoded);
 
-				// === entropy byte[] and size ===
 				
-				// encoded coordinates
-				JavaPairRDD<String, byte[]> encodedByteArray = encoded.mapToPair(new MapToByteArray());
-
-				JavaPairRDD<String, byte[]> data = originalBA.union(encodedByteArray);
-
-				List<Tuple2<String, Double>> entropyByteArr = data
-						.mapToPair(t -> new Tuple2<String, Double>(t._1, CompressionStatistics.calculateEntropyOnBytes(t._2) ))
-						.collect();
-				
-				List<Tuple2<String, Long>> sizeByteArr = data
+				List<Tuple2<String, Long>> size = data
 						.mapToPair(new GetGzipSize())
 						.collect();
 				
@@ -148,21 +123,12 @@ public class RunTotalAnalysis implements Serializable {
 				if (!(new File(workDir).exists()))
 					new File(workDir).mkdir();
 
-				// report entropy of encoded data (bits)
-				String uri1 = workDir+name+"_entropy_arrays.csv";
-				w.writeDoubleToFile(entropyArr, uri1);
-				
-				// report entropy of packed data (bits)
-				String uri2 = workDir+name+"_entropy_byte_arrays.csv";
-				w.writeDoubleToFile(entropyByteArr, uri2);
-				
 				// report size of compressed data (gzip)
-				String uri3 = workDir+name+"_total_gzip_size.csv";
-				w.writeLongToFile(sizeByteArr, uri3);
+				String uri = workDir+name+"_size_GZIP.csv";
+				w.writeLongToFile(size, uri);
 			}
 			coordinates.unpersist();
 			original.unpersist();
-			originalBA.unpersist();
 		}
 		System.out.println("DONE!");
 		System.out.println("Time: " + (System.nanoTime() - start)/1E9 + " sec.");
