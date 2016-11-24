@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package org.rcsb.mmtf.compression;
 
 import java.io.ByteArrayOutputStream;
@@ -13,8 +11,11 @@ import org.meteogroup.jbrotli.BrotliStreamCompressor;
 import org.meteogroup.jbrotli.libloader.BrotliLibraryLoader;
 
 /**
+ * Brotli (https://www.ietf.org/rfc/rfc7932.txt) is a fast compression algorithm developed by Google. 
+ * Brotli uses the combination of LZ77 and Huffman coding. 
+ * http://www.gstatic.com/b/brotlidocs/brotli-2015-09-22.pdf 
+ * 
  * @author Yana Valasatava
- *
  */
 public class BrotliCompression implements Serializable {
 	

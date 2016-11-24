@@ -14,6 +14,7 @@ import java.util.List;
 import javax.vecmath.Point3d;
 
 import org.apache.spark.api.java.JavaPairRDD;
+import org.rcsb.mmtf.compression.GzipCompression;
 import org.rcsb.mmtf.dataholders.MmtfStructure;
 import org.rcsb.mmtf.encoders.InterCoder;
 import org.rcsb.mmtf.encoders.InterDeltaEncode;
@@ -27,7 +28,6 @@ import org.rcsb.mmtf.mappers.MapArrayToModels;
 import org.rcsb.mmtf.mappers.MapConnectivityToCoordinatesBean;
 import org.rcsb.mmtf.mappers.MapMmtfStructureToCoordinates;
 import org.rcsb.mmtf.mappers.StructureToConnectivity;
-import org.rcsb.mmtf.methods.GetGzipSize;
 import org.rcsb.mmtf.packing.RecursiveIndexingPacking;
 import org.rcsb.mmtf.spark.data.MmtfStructureData;
 import org.rcsb.mmtf.utils.ArrayUtils;
@@ -121,7 +121,7 @@ public class RunEnsamblesAnalysis implements Serializable {
 					// compressed size
 					List<Tuple2<String, Long>> size = encoded
 						.mapToPair(t -> new Tuple2<String, byte[]>(t._1, Convertors.arrayToByteArray(t._2, Short.MAX_VALUE)))
-						.mapToPair(new GetGzipSize())
+						.mapToPair(t -> new Tuple2<String, Long>(t._1, (long) GzipCompression.compress(t._2).length))
 						.collect();
 						
 					// == REPORT RESULTS ==

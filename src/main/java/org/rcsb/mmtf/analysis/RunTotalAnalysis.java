@@ -12,6 +12,7 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.rcsb.mmtf.codec.ArrayConverters;
 import org.rcsb.mmtf.compression.CompressUnitVector16Bit;
 import org.rcsb.mmtf.compression.CompressUnitVector32Bit;
+import org.rcsb.mmtf.compression.GzipCompression;
 import org.rcsb.mmtf.dataholders.MmtfStructure;
 import org.rcsb.mmtf.encoders.IntegerEncode;
 import org.rcsb.mmtf.encoders.IntraCoder;
@@ -22,7 +23,6 @@ import org.rcsb.mmtf.encoders.UnitVectorEncode;
 import org.rcsb.mmtf.mappers.FlatMapIntraEncodingMethods;
 import org.rcsb.mmtf.mappers.MapMmtfStructureToCoordinates;
 import org.rcsb.mmtf.mappers.MapToByteArray;
-import org.rcsb.mmtf.methods.GetGzipSize;
 import org.rcsb.mmtf.packing.RecursiveIndexingPacking;
 import org.rcsb.mmtf.spark.data.MmtfStructureData;
 import org.rcsb.mmtf.utils.ArrayUtils;
@@ -110,7 +110,7 @@ public class RunTotalAnalysis implements Serializable {
 
 				
 				List<Tuple2<String, Long>> size = data
-						.mapToPair(new GetGzipSize())
+						.mapToPair(t -> new Tuple2<String, Long>(t._1, (long) GzipCompression.compress(t._2).length))
 						.collect();
 				
 				// == REPORT RESULTS ==
