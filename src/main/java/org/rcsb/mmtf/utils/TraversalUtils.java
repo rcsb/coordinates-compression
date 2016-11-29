@@ -20,19 +20,13 @@ public class TraversalUtils {
 
 		List<StructureToConnectivity> connectivity = new ArrayList<StructureToConnectivity>();
 
-		//Boolean[] supFlags = {true, false};
-		Boolean[] supFlags = {false};
-
-		String[] metrics = {"avrgdelta", "gzip"};
-		
+		Boolean[] supFlags = {true, false};
 		for ( Boolean supFlag : supFlags) {		
 			connectivity.add(new TraverseReference(supFlag));
 			connectivity.add(new TraverseWaterfall(supFlag));
 			connectivity.add(new TraverseMST(supFlag, "rmsd", ""));
-			for (String metric : metrics) {
-				connectivity.add(new TraverseMST(supFlag, metric, "delta"));
-				connectivity.add(new TraverseMST(supFlag, metric, "error"));
-			}
+			connectivity.add(new TraverseMST(supFlag, "gzip", "delta"));
+			connectivity.add(new TraverseMST(supFlag, "gzip", "error"));
 		}	
 		return connectivity; 
 	}

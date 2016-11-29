@@ -86,7 +86,6 @@ public class TraverseMST implements Serializable, StructureToConnectivity {
 		cbean.setSupFlag(supFlag);
 		cbean.setMetricUsesEncoding(encoding);
 
-
 		List<Connection<Short>> connections = getMinimumSpanningTreePath(coordinates, encoding);
 		
 		Transformation transformation = new Transformation();
@@ -115,7 +114,6 @@ public class TraverseMST implements Serializable, StructureToConnectivity {
 
 			cbean.addCoordinates(coords_j);
 		}
-
 		cbean.setConnections(connections);
 
 		return cbean;
@@ -141,7 +139,7 @@ public class TraverseMST implements Serializable, StructureToConnectivity {
  		
 		else {
  			
-			// initialize a weighted org.rcsb.mmtf.graph
+			// initialize a weighted graph
 			SimpleWeightedGraph<Integer, DefaultWeightedEdge> graph = new SimpleWeightedGraph<Integer, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 			
 			// calculate weights between model based on a selected metric
@@ -169,14 +167,14 @@ public class TraverseMST implements Serializable, StructureToConnectivity {
 			}
 
 			//=======================================
-			// A new org.rcsb.mmtf.graph is created out of minimum spanning tree and all models are added to a pool
+			// A new graph is created out of minimum spanning tree and all models are added to a pool
 			//=======================================
 			
-			// get the edges of a Minimum Spanning Tree generated for a weighted org.rcsb.mmtf.graph
+			// get the edges of a Minimum Spanning Tree generated for a weighted graph
 			PrimMinimumSpanningTree<Integer, DefaultWeightedEdge> tree = new PrimMinimumSpanningTree<Integer, DefaultWeightedEdge>(graph);
 			Set<DefaultWeightedEdge> mspEdges = tree.getMinimumSpanningTreeEdgeSet();
 			
-			// build a new org.rcsb.mmtf.graph from the MST edges
+			// build a new graph from the MST edges
 			Graph<Integer, DefaultEdge> mspEdgesGraph = new SimpleGraph<Integer, DefaultEdge>(DefaultEdge.class);
 						
 			Object[] edges = mspEdges.toArray();
@@ -198,7 +196,7 @@ public class TraverseMST implements Serializable, StructureToConnectivity {
 			ArrayList<Integer> spotPool = new ArrayList<Integer>();
 			for (int m_id=0; m_id < coordinates.length; m_id++) {spotPool.add(m_id);}
 			
-			// identify the most distant points in a org.rcsb.mmtf.graph: startVertex and endVertex
+			// identify the most distant points in a graph: startVertex and endVertex
 			
 			// GraphIterator<Integer, DefaultEdge> iterator = new DepthFirstIterator<Integer, DefaultEdge>(mspEdgesGraph);
 			BreadthFirstIterator<Integer, DefaultEdge> iteratorBack = new BreadthFirstIterator<Integer, DefaultEdge>(mspEdgesGraph, spotPool.get(0));

@@ -353,16 +353,12 @@ public class Traverse implements Serializable{
 								end = s;
 							}
 							connections.add(new Connection<Short>((short) prev, (short) end));
-						}
-						
+						}				
 					}
 					trackSegments.add(branch);
 				}	
 			}
  		}
-		
 		return connections;
-
-	}
-	
+	}	
 }
