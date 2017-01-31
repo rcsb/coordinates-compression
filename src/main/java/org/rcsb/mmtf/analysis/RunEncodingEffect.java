@@ -21,7 +21,6 @@ import org.rcsb.mmtf.encoders.IntraErrorEncode;
 import org.rcsb.mmtf.encoders.LeGallWaveletEncode;
 import org.rcsb.mmtf.encoders.UnitVectorEncode;
 import org.rcsb.mmtf.mappers.FlatMapIntraEncodingMethods;
-import org.rcsb.mmtf.mappers.MapEncodedValueToDistribution;
 import org.rcsb.mmtf.mappers.MapMmtfStructureToCoordinates;
 import org.rcsb.mmtf.spark.data.MmtfStructureData;
 import org.rcsb.mmtf.utils.ArrayUtils;
@@ -31,10 +30,10 @@ import com.google.common.io.Files;
 
 import scala.Tuple2;
 
-public class RunDistributionOfEncodedValues implements Serializable {
+public class RunEncodingEffect implements Serializable {
 
 	/** 
-	 * Run the analysis over the entire PDB archive to get a distribution of encoded values
+	 * Run org.rcsb.mmtf.intracoders analysis over the entire PDB archive
 	 * 
 	 */
 
@@ -48,6 +47,7 @@ public class RunDistributionOfEncodedValues implements Serializable {
 		String root = args[1];
 		
 		String compression;
+
 		long start = System.nanoTime();
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 		
@@ -66,7 +66,8 @@ public class RunDistributionOfEncodedValues implements Serializable {
 		// Different data sets
 		boolean[] caTraceFlags = {false, true};
 
-		JavaPairRDD<String, MmtfStructure> mmtfEncoded = new MmtfStructureData(path).getJavaPairRdd()
+		JavaPairRDD<String, MmtfStructure> mmtfEncoded = new MmtfStructureData(path)
+				.getJavaPairRdd()
 				.sample(false, 0.001)
 				.cache();
 		
@@ -88,12 +89,12 @@ public class RunDistributionOfEncodedValues implements Serializable {
 				if (multiplier == 1000.0) {compression = "lossless";}
 				else {compression = "lossy";}
 								
-				List<Tuple2<String, float[]>> distribution = coordinates
+				List<Tuple2<String, int[]>> encoded = coordinates
 						.mapToPair(t -> new Tuple2<String, float[]>(t._1, Convertors.nestedArrayToFlat(t._2)))
 						.mapToPair(t -> new Tuple2<String, int[]>(t._1, ArrayConverters.convertFloatsToInts(t._2, multiplier)))
 						.flatMapToPair(new FlatMapIntraEncodingMethods(methods))
-						.mapToPair(new MapEncodedValueToDistribution()).collect();
-				
+						.collect();
+
 				// == REPORT RESULTS ==
 				
 				String dir = root+"pdb"+"_"+timeStamp+"/";
@@ -104,11 +105,12 @@ public class RunDistributionOfEncodedValues implements Serializable {
 				if (!(new File(workDir).exists()))
 					new File(workDir).mkdir();
 
-				// report entropy of encoded data (bits)
-				String uri = workDir+name+"_distribution_arrays.csv";
+				String uri = workDir+name+"encoding_effect.csv";
 				File f = new File(uri);
-				for (Tuple2<String, float[]> t : distribution) {
-					Files.append(t._1+";"+String.format("%.2f;%.2f;%.2f;%.2f", t._2[0], t._2[1], t._2[2], t._2[3])+"\n", f, Charset.defaultCharset());
+				for (Tuple2<String, int[]> t : encoded) {
+					for (int i : t._2) {
+						Files.append(t._1+";"+String.format("%d", i)+"\n", f, Charset.defaultCharset());
+					}
 				}
 			}
 			coordinates.unpersist();

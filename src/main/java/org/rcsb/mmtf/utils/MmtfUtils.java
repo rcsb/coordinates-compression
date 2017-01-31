@@ -1,6 +1,5 @@
 package org.rcsb.mmtf.utils;
 
-import org.biojava.nbio.core.exceptions.CompoundNotFoundException;
 import org.rcsb.mmtf.api.StructureDataInterface;
 import org.rcsb.mmtf.dataholders.Entity;
 import org.rcsb.mmtf.dataholders.MmtfStructure;
@@ -15,7 +14,7 @@ import org.rcsb.mmtf.decoders.MmtfCustomDecoder;
  */
 public class MmtfUtils {
 
-	public static int getNumOfPolymerChains(MmtfStructure mmtfData) throws CompoundNotFoundException {
+	public static int getNumOfPolymerChains(MmtfStructure mmtfData){
 		
 		StructureDataInterface dataApi = new GenericDecoder(mmtfData);
 		
@@ -31,7 +30,7 @@ public class MmtfUtils {
 		return chainAddedInd;
 	}
 	
-	public static boolean hasAllIdenticalSubunits(MmtfStructure mmtfData) throws CompoundNotFoundException {
+	public static boolean hasAllIdenticalSubunits(MmtfStructure mmtfData) {
 		
 		StructureDataInterface dataApi = new GenericDecoder(mmtfData);
 		
@@ -65,7 +64,7 @@ public class MmtfUtils {
 	 * @param mmtfData the input MMTF structure
 	 * @return true if all chains are identical 
 	 */
-	public static boolean hasAllChainsIdentical(MmtfStructure mmtfData) throws CompoundNotFoundException {
+	public static boolean hasAllChainsIdentical(MmtfStructure mmtfData)  {
 
 		String[][] structure = MmtfCustomDecoder.decodeResolvedSequences(mmtfData);
 

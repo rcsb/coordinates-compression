@@ -28,7 +28,7 @@ public class TraverseReference implements Serializable, StructureToConnectivity 
 	 * 
 	 */
 	private static final long serialVersionUID = -2031854063199006041L;
-
+	
 	private boolean supFlag;
 	public TraverseReference(boolean supFlag) {
 		this.supFlag = supFlag;
@@ -64,7 +64,6 @@ public class TraverseReference implements Serializable, StructureToConnectivity 
 			Point3d[] coords_j = t._2[j];
 			if (supFlag) {
 				
-				//Superposition superposer = new AbsoluteDeviationFitting();
 				Superposition superposer = new LeastSquaresFitting();
 				
 				superposer.run(coords_j, coords_i);

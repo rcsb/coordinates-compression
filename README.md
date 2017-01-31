@@ -1,2 +1,2 @@
-# coordinates-compression
-This repository contains the compression methods described in the paper "Towards efficient compression of 3D coordinates of macromolecular structures"
+## Compression of 3D coordinates of macromolecular structures
+This repository contains the compression methods described in the paper "Towards an efficient compression of 3D coordinates of macromolecular structures". By balancing the compression efficiency as in terms of the decompression speed and compression ratio, and code complexity our results provide the foundation for a novel standard to represent macromolecular coordinates in a compact and useful ***M**acro**M**olecular **T**ransmission **F**ormat* for 3D structures ([http://mmtf.rcsb.org]). This format allows a compact representation and interactive visualization of the largest macromolecular complexes that are currently in the Protein Data Bank.

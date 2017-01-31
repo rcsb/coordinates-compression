@@ -69,7 +69,7 @@ public class RunTotalAnalysis implements Serializable {
 		boolean[] caTraceFlags = {false, true};
 
 		JavaPairRDD<String, MmtfStructure> mmtfEncoded = new MmtfStructureData(path).getJavaPairRdd()
-						.cache();
+				.cache();
 		
 		// == RUN ANALYSIS ==
 		for (boolean caTrace : caTraceFlags) {
@@ -108,11 +108,10 @@ public class RunTotalAnalysis implements Serializable {
 
 				JavaPairRDD<String, byte[]> data = original.union(encoded);
 
-				
 				List<Tuple2<String, Long>> size = data
 						.mapToPair(t -> new Tuple2<String, Long>(t._1, (long) GzipCompression.compress(t._2).length))
 						.collect();
-				
+
 				// == REPORT RESULTS ==
 				
 				String dir = root+"pdb"+"_"+timeStamp+"/";
