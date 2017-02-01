@@ -13,7 +13,7 @@ The *install* goal will compile, test, and package the project’s code and then
 ## How to run the analysis
 Maven **exec** plugin lets you run the main method of a Java class in the project, with the project dependencies automatically included in the classpath.
 
-The proposed approaches are implement as two types of strategies: (i) intramolecular compression that operates on the sequence of atoms within a polymer chain; and (ii) intermolecular compression designed for the compression of special cases of multiple chains with identical atoms, such as NMR models and structures with repeated identical subunits.
+The proposed approaches are implemented as two types of strategies: (i) intramolecular compression that operates on the sequence of atoms within a polymer chain; and (ii) intermolecular compression designed for the compression of special cases of multiple chains with identical atoms, such as NMR models and structures with repeated identical subunits.
 
 ### Run intramolecular compression analysis
 ```

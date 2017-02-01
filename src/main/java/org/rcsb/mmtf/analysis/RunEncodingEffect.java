@@ -68,7 +68,7 @@ public class RunEncodingEffect implements Serializable {
 
 		JavaPairRDD<String, MmtfStructure> mmtfEncoded = new MmtfStructureData(path)
 				.getJavaPairRdd()
-				.sample(false, 0.001)
+				.sample(false, 0.01)
 				.cache();
 		
 		// == RUN ANALYSIS ==
