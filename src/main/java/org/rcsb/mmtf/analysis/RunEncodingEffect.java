@@ -105,7 +105,7 @@ public class RunEncodingEffect implements Serializable {
 				if (!(new File(workDir).exists()))
 					new File(workDir).mkdir();
 
-				String uri = workDir+name+"encoding_effect.csv";
+				String uri = workDir+name+"_encoding_effect.csv";
 				File f = new File(uri);
 				for (Tuple2<String, int[]> t : encoded) {
 					for (int i : t._2) {

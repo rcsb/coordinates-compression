@@ -32,6 +32,9 @@ mvn exec:java -Dexec.mainClass="org.rcsb.mmtf.analysis.RunEnsamblesAnalysis" -De
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`arg2`: path to the existing folder to write the results
 
 **Note:** You may need to increase the memory allocation pool for a Java Virtual Machine. Use *-Xms* option to increase the Java heap size to 8G when running the analysis.
+```
+export MAVEN_OPTS="-Xms8G"
+```
 
 ## How to get 3D structures in MMTF format
 You can download a Hadoop sequence file with the PDB structures in MMTF format.
