@@ -20,6 +20,7 @@ The proposed approaches are implement as two types of strategies: (i) intramolec
 mvn exec:java -Dexec.mainClass="org.rcsb.mmtf.analysis.RunTotalAnalysis" -Dexec.args="arg1 arg2"
 ```
 `arg1`: path to a Hadoop sequence file with the PDB structures in MMTF format
+
 `arg2`: path to the folder with results
 
 ### Run intermolecular compression analysis
@@ -27,6 +28,7 @@ mvn exec:java -Dexec.mainClass="org.rcsb.mmtf.analysis.RunTotalAnalysis" -Dexec.
 mvn exec:java -Dexec.mainClass="org.rcsb.mmtf.analysis.RunEnsamblesAnalysis" -Dexec.args="arg1 arg2"
 ```
 `arg1`: path to a Hadoop sequence file with the PDB structures in MMTF format
+
 `arg2`: path to the folder with results
 
 ## How to get 3D structures in MMTF format
