@@ -10,6 +10,12 @@ $ mvn install
 ```
 The *install* goal will compile, test, and package the project’s code and then copy it into the local dependency repository which Maven maintains on your local machine.
 
+<div style="background-color:#FCFFD4; padding:5px;padding-left:10px;"><div>
+If you use Maven for the first time, these links can be useful:</br>
+[Where to download Maven](http://maven.apache.org/download.cgi)</br>
+[How to install Maven](http://maven.apache.org/install.html)
+</div></div>
+
 ## How to run the analysis
 Maven **exec** plugin lets you run the main method of a Java class in the project, with the project dependencies automatically included in the classpath.
 
@@ -31,7 +37,9 @@ mvn exec:java -Dexec.mainClass="org.rcsb.mmtf.analysis.RunEnsamblesAnalysis" -De
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`arg2`: path to the existing folder to write the results
 
+<div style="background-color:#FCFFD4; padding:5px;padding-left:10px;"><div>
 **Note:** You may need to increase the memory allocation pool for a Java Virtual Machine. Use *-Xms* option to increase the Java heap size to 8G when running the analysis.
+</div></div>
 ```
 export MAVEN_OPTS="-Xms8G"
 ```
