@@ -21,7 +21,7 @@ mvn exec:java -Dexec.mainClass="org.rcsb.mmtf.analysis.RunTotalAnalysis" -Dexec.
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`arg1`: path to a Hadoop sequence file with the PDB structures in MMTF format
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`arg2`: path to the folder with results
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`arg2`: path to the existing folder to write the results
 
 ### Run intermolecular compression analysis
 ```
@@ -29,7 +29,7 @@ mvn exec:java -Dexec.mainClass="org.rcsb.mmtf.analysis.RunEnsamblesAnalysis" -De
 ```
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`arg1`: path to a Hadoop sequence file with the PDB structures in MMTF format
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`arg2`: path to the folder with results
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`arg2`: path to the existing folder to write the results
 
 **Note:** You may need to increase the memory allocation pool for a Java Virtual Machine. Use *-Xms* option to increase the Java heap size to 8G when running the analysis.
 
