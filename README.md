@@ -4,7 +4,7 @@ This repository contains the compression methods described in the paper "**Towar
 ## Install from git repository
 You can get the latest source code using git. Then you can execute the *install* goal with [Maven](http://maven.apache.org/guides/getting-started/index.html#What_is_Maven) to build the project.
 ```
-$ git clone git@github.com:rcsb/coordinates-compression.git
+$ git clone https://github.com/rcsb/coordinates-compression.git
 $ cd coordinates-compression
 $ mvn install
 ```
